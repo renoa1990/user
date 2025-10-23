@@ -20,7 +20,7 @@ async function handler(
     client.parisuser.findMany({
       where: {
         OR: [
-          { userId: data.userId },
+          { userId: { equals: data.userId, mode: "insensitive" } },
           { nickName: data.nickName },
           { phone: data.phone },
           { bankName: data.bankName, bankNumber: data.bankNumber },
@@ -163,7 +163,11 @@ const validate = (
 ) => {
   const checkup: { message: string; type: string }[] = [];
 
-  if (userIdCheck.some((item) => item.userId === data?.userId)) {
+  if (
+    userIdCheck.some(
+      (item) => item.userId.toLowerCase() === data?.userId.toLowerCase()
+    )
+  ) {
     //아이이디 중복
     checkup.push({ message: "사용할수 없는 아이디입니다", type: "userId" });
   }

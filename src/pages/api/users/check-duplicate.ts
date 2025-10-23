@@ -29,7 +29,7 @@ async function handler(
       return res.json({ ok: false, message: "아이디 값이 필요합니다" });
     }
     duplicateCheck = await client.parisuser.findFirst({
-      where: { userId: value },
+      where: { userId: { equals: value, mode: "insensitive" } },
       select: { userId: true },
     });
   } else if (type === "nickName") {

@@ -364,7 +364,7 @@ export const getServerSideProps = withSsrSession(async function ({
     };
   }
 
-  req.session.save();
+  req.session.save(); // 세션 갱신 (TTXD 보존됨)
   const [levelSetup, sportsSetup, basicSetup] = await Promise.all([
     client.levelsetup.findUnique({
       where: {

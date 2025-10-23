@@ -46,7 +46,53 @@ export const CodeForm: NextPage<props> = (props) => {
     <Fade in timeout={800}>
       <Box>
         {/* 단계 표시기 */}
-        <Box sx={authStepIndicatorStyle}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: 3,
+            "& .step": {
+              display: "flex",
+              alignItems: "center",
+              "& .step-number": {
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                transition: "all 0.3s ease",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                color: "#AEB0B4",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+              },
+              "&.active .step-number": {
+                backgroundColor: "#00BFFF",
+                color: "white",
+                borderColor: "#00BFFF",
+                boxShadow: "0 0 10px rgba(0, 191, 255, 0.3)",
+              },
+              "&.completed .step-number": {
+                backgroundColor: "#2e7d32",
+                color: "white",
+                borderColor: "#2e7d32",
+              },
+            },
+            "& .step-line": {
+              width: 120,
+              height: 2,
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              margin: "0 24px",
+              transition: "all 0.3s ease",
+            },
+            "& .completed .step-line": {
+              backgroundColor: "#2e7d32",
+            },
+          }}
+        >
           <Box className="step active">
             <Box className="step-number">1</Box>
             <Typography variant="caption" sx={{ ml: 1, fontWeight: 600 }}>
@@ -65,7 +111,7 @@ export const CodeForm: NextPage<props> = (props) => {
           </Box>
         </Box>
 
-        <Box sx={{ textAlign: "center", mb: 4 }}>
+        <Box sx={{ textAlign: "center", mb: 6, mt: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
             <Box
               sx={{
@@ -102,7 +148,7 @@ export const CodeForm: NextPage<props> = (props) => {
         </Box>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextField
                 label="회원 가입 코드"
@@ -133,7 +179,7 @@ export const CodeForm: NextPage<props> = (props) => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <LoadingButton
                 size="large"
                 variant="contained"
@@ -148,12 +194,12 @@ export const CodeForm: NextPage<props> = (props) => {
               </LoadingButton>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 3 }}>
               <Box sx={{ textAlign: "center" }}>
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ mb: 1 }}
+                  sx={{ mb: 2 }}
                 >
                   이미 계정이 있으신가요?
                 </Typography>

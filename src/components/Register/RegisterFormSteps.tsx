@@ -88,6 +88,7 @@ export const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
               },
               validate: (value) =>
                 value !== checkUserid || "사용할수 없는 아이디입니다.",
+              setValueAs: (value) => value?.toLowerCase(),
             })}
             error={!!errors?.userId}
             helperText={errors?.userId ? errors.userId.message : null}

@@ -18,7 +18,7 @@ async function handler(
 
   const userIdCheck = await client.parisuser.findFirst({
     where: {
-      userId,
+      userId: { equals: userId, mode: "insensitive" },
       OR: [{ role: "user" }, { role: "test" }],
     },
     select: {

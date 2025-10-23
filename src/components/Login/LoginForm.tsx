@@ -119,6 +119,7 @@ export const LoginForm: FC<PropsData> = (Props) => {
                         value: 15,
                         message: "15자를 초과할수 없습니다",
                       },
+                      setValueAs: (value) => value?.toLowerCase(),
                     })}
                     error={!!errors?.userId}
                     helperText={errors?.userId ? errors.userId.message : null}

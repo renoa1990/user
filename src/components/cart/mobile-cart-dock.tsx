@@ -141,15 +141,15 @@ export default function MobileCartDock({
             noWrap
             sx={{
               color: "text.secondary",
-              fontSize: 13,
+              fontSize: 11,
               lineHeight: 1.3,
               fontWeight: 500,
             }}
           >
-            선택경기:{" "}
+            경기:{" "}
             <Typography
               component="span"
-              sx={{ color: "primary.main", fontSize: 14, fontWeight: 700 }}
+              sx={{ color: "primary.main", fontSize: 12, fontWeight: 700 }}
             >
               [{count}]
             </Typography>
@@ -159,15 +159,15 @@ export default function MobileCartDock({
             noWrap
             sx={{
               color: "text.secondary",
-              fontSize: 13,
+              fontSize: 11,
               lineHeight: 1.3,
               fontWeight: 500,
             }}
           >
-            합산배당:{" "}
+            배당:{" "}
             <Typography
               component="span"
-              sx={{ color: "primary.main", fontSize: 14, fontWeight: 700 }}
+              sx={{ color: "primary.main", fontSize: 12, fontWeight: 700 }}
             >
               {effectiveOdds.toFixed(2)}
             </Typography>

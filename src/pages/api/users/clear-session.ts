@@ -15,7 +15,7 @@ async function handler(
     await client.parisuser.update({
       where: { id: user.id },
       data: {
-        session: "", // 세션 토큰을 빈 문자열로 설정
+        session: "FORCE_LOGOUT", // 강제 로그아웃 표시
         lastPageAt: null, // 마지막 활동 시간 초기화
       },
     });

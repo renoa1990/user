@@ -217,10 +217,10 @@ export const authStepIndicatorStyle = {
       border: "1px solid rgba(255, 255, 255, 0.2)",
     },
     "& .step-line": {
-      width: 40,
+      width: 80,
       height: 2,
       backgroundColor: "rgba(255, 255, 255, 0.1)",
-      margin: "0 8px",
+      margin: "0 16px",
       transition: "all 0.3s ease",
     },
     "&.active .step-number": {

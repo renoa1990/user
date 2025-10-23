@@ -63,10 +63,24 @@ async function handler(
     }
 
     if (profile) {
-      // 세션 토큰이 일치하거나, 세션이 비어있는 경우 (새로고침 등) 허용
-      if (profile.session === user.TTXD || !profile.session) {
-        // 세션이 비어있다면 현재 세션으로 업데이트
-        if (!profile.session) {
+      // 강제 로그아웃 감지: 세션이 "FORCE_LOGOUT"으로 설정된 경우
+      if (profile.session === "FORCE_LOGOUT") {
+        console.log("Force logout detected for user:", user.id);
+        req.session.destroy();
+        return res.json({
+          ok: false,
+          message: "관리자에 의해 강제 로그아웃되었습니다",
+        });
+      }
+
+      // 세션 토큰이 일치하거나, 세션이 비어있는 경우 허용
+      if (
+        profile.session === user.TTXD ||
+        !profile.session ||
+        profile.session === ""
+      ) {
+        // 세션이 비어있거나 일치하지 않으면 현재 세션으로 업데이트
+        if (!profile.session || profile.session !== user.TTXD) {
           await client.parisuser.update({
             where: { id: user.id },
             data: {
@@ -90,8 +104,11 @@ async function handler(
           },
         });
       } else {
-        // 중복 로그인 감지 시에도 현재 세션을 허용 (기존 세션이 만료된 경우)
-        console.log("Session mismatch detected, allowing current session");
+        // 세션 토큰이 다르더라도 사용자가 활성화되어 있으면 허용
+        // (다른 기기에서 로그인했을 수도 있지만, 현재 사용자를 우선시)
+        console.log(
+          "Session mismatch detected, but allowing current session for active user"
+        );
         await client.parisuser.update({
           where: { id: user.id },
           data: {

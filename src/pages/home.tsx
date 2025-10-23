@@ -395,9 +395,9 @@ export const getServerSideProps = withSsrSession(async function ({
     }
   }
 
-  // 사용자 정보 업데이트 및 세션 갱신 (응답 전에 처리)
+  // 사용자 정보 업데이트 및 세션 갱신 (홈 페이지에서만)
   await Promise.all([
-    req.session.save(), // 세션 갱신
+    req.session.save(), // 세션 갱신 (홈 페이지에서만)
     client.parisuser.update({
       where: {
         id: user?.id,
