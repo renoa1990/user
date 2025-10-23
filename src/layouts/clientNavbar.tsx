@@ -200,6 +200,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -222,6 +223,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -244,6 +246,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -266,6 +269,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -288,6 +292,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -315,6 +320,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -344,6 +350,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
@@ -371,6 +378,7 @@ export const ClientNavbar: FC<props> = (props) => {
                     : "text.primary"
                 }
                 sx={{
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     color: "primary.main",
                   },
