@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
     >
       <Head>
-        <title>Monaco</title>
+        <title>babel</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>

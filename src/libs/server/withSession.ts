@@ -1,7 +1,7 @@
 import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
 
 const cookieConfig = {
-  cookieName: "monaco",
+  cookieName: "babel",
   password: process.env.COOKIE_PASSWORD!,
   cookieOptions: {
     maxAge: 60 * 30,

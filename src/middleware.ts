@@ -21,7 +21,7 @@ export function middleware(req: NextRequest) {
   ) {
     return NextResponse.rewrite(url);
   } else {
-    let cookie = req.cookies.get("monaco");
+    let cookie = req.cookies.get("babel");
     if (!cookie) {
       return NextResponse.redirect(new URL("/", req.url));
     } else {
