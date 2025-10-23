@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import useMutation from "@libs/useMutation";
 import { useSnackbar } from "notistack";
 import Badge from "@mui/material/Badge";
-import { alpha, styled } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 import Image from "next/image";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import MonetizationOnRoundedIcon from "@mui/icons-material/MonetizationOnRounded";
@@ -123,8 +123,6 @@ export const ClientNavbar: FC<props> = (props) => {
     pointChange({});
   };
 
-  const lvUrl = lv ? `/images/level/lv${lv}.png` : undefined;
-
   return (
     <>
       <AppBar
@@ -173,7 +171,7 @@ export const ClientNavbar: FC<props> = (props) => {
                 alt="mainLogo"
                 width={110}
                 height={42}
-                priority
+                priority={false}
               />
             </Link>
           </Box>
@@ -299,6 +297,7 @@ export const ClientNavbar: FC<props> = (props) => {
               </Typography>
             </Link>
             <Box
+              id="minigame-menu-button"
               onClick={handleMinigameMenuClick}
               sx={{
                 cursor: "pointer",
@@ -354,6 +353,7 @@ export const ClientNavbar: FC<props> = (props) => {
               </Typography>
             </Link>
             <Box
+              id="customer-menu-button"
               onClick={handleCustomerMenuClick}
               sx={{
                 cursor: "pointer",
@@ -399,6 +399,13 @@ export const ClientNavbar: FC<props> = (props) => {
               transformOrigin={{
                 vertical: "top",
                 horizontal: "left",
+              }}
+              // aria-hidden 문제 해결을 위한 속성 추가
+              disableAutoFocusItem
+              aria-hidden={false}
+              MenuListProps={{
+                "aria-labelledby": "customer-menu-button",
+                "aria-hidden": false,
               }}
               PaperProps={{
                 sx: {
@@ -483,6 +490,13 @@ export const ClientNavbar: FC<props> = (props) => {
               transformOrigin={{
                 vertical: "top",
                 horizontal: "left",
+              }}
+              // aria-hidden 문제 해결을 위한 속성 추가
+              disableAutoFocusItem
+              aria-hidden={false}
+              MenuListProps={{
+                "aria-labelledby": "minigame-menu-button",
+                "aria-hidden": false,
               }}
               PaperProps={{
                 sx: {
@@ -973,7 +987,7 @@ export const ClientNavbar: FC<props> = (props) => {
                 alt="mainLogo"
                 width={92}
                 height={35}
-                priority
+                priority={false}
                 style={{ height: 35, width: "auto" }}
               />
             </Link>

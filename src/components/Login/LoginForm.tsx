@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -58,7 +58,12 @@ export const LoginForm: FC<PropsData> = (Props) => {
   const turnstile = useTurnstile();
   const [isOk, setIsOk] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     register,
@@ -129,8 +134,16 @@ export const LoginForm: FC<PropsData> = (Props) => {
                     sx={authTextFieldStyle}
                     inputProps={{ maxLength: 20 }}
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
+                      endAdornment: mounted ? (
+                        <InputAdornment
+                          position="end"
+                          sx={{
+                            // 서버와 클라이언트 간 일관성을 위한 명시적 스타일
+                            "&.MuiInputAdornment-root": {
+                              margin: 0,
+                            },
+                          }}
+                        >
                           <IconButton
                             onClick={() => setShowPassword(!showPassword)}
                             edge="end"
@@ -139,7 +152,7 @@ export const LoginForm: FC<PropsData> = (Props) => {
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
-                      ),
+                      ) : null,
                     }}
                     {...register("password", {
                       required: "비밀번호를 입력하세요",

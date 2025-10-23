@@ -274,6 +274,12 @@ async function handler(
           },
         });
 
+        // 세션 토큰을 데이터베이스에 저장
+        await client.parisuser.update({
+          where: { id: userIdCheck.id },
+          data: { session: TTXD },
+        });
+
         // 세션 저장 (확실히 저장되도록 처리)
         await req.session.save();
 

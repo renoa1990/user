@@ -6,8 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Tabs, Tab, Box } from "@mui/material";
 
 const CASINO_TABS: { label: string; value: string; href: string }[] = [
-  { label: "카지노", value: "casino", href: "/game/casino" },
   { label: "슬롯", value: "slot", href: "/game/slot" },
+  { label: "카지노", value: "casino", href: "/game/casino" },
 ];
 
 /** 카지노 탭 스타일 */
@@ -75,9 +75,3 @@ export default function CasinoTabs() {
     </Box>
   );
 }
-
-
-
-
-
-

@@ -7,9 +7,7 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const {
-    session: { user },
-  } = req;
+  const user = req.session?.user;
 
   if (user) {
     const [profile, serverDown] = await Promise.all([
@@ -17,7 +15,6 @@ async function handler(
         where: {
           id: user?.id,
           OR: [{ role: "user" }, { role: "test" }],
-          session: user.TTXD,
           activate: "true",
         },
         select: {
@@ -133,10 +130,11 @@ async function handler(
       });
     }
   } else {
-    // 세션 없음 - 이미 정리된 상태
-    req.session.destroy();
+    // 세션 없음 - 로그인 필요
+    console.log("No session found in /api/users/me");
     res.json({
       ok: false,
+      message: "로그인이 필요합니다",
     });
   }
 }
@@ -145,5 +143,6 @@ export default withAipSession(
   withHandler({
     methods: ["GET"],
     handler,
+    isPrivate: false, // 세션 검증을 우회하고 내부에서 처리
   })
 );

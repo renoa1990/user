@@ -73,6 +73,7 @@ export const Footer: FC = () => {
             alt="GGBET"
             width={100}
             height={38}
+            priority={false}
           />
           <Typography
             variant="caption"

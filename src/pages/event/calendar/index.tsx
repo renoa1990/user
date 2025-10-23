@@ -51,7 +51,6 @@ const Calendar: NextPage<props> = (props) => {
     }
   );
 
-  console.log(data);
   return (
     <>
       <Head>

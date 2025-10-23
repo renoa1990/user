@@ -36,8 +36,14 @@ export default function withHandler({
         });
       }
 
-      // 인증 검증
+      // 인증 검증 (더 관대한 검증)
       if (isPrivate && !req.session.user) {
+        // 세션이 없거나 손상된 경우에만 에러 발생
+        console.log("Session validation failed:", {
+          hasSession: !!req.session,
+          hasUser: !!req.session?.user,
+          sessionKeys: req.session ? Object.keys(req.session) : [],
+        });
         throw new AuthenticationError("로그인이 필요합니다");
       }
 

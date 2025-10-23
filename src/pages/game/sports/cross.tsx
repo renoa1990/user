@@ -313,10 +313,57 @@ export const getServerSideProps = withSsrSession(async function ({
     }
   }
   const user = req?.session.user;
-  if (!user)
+  if (!user) {
+    // 세션이 없으면 로그인 페이지로 리다이렉트
     return {
-      notFound: true,
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     };
+  }
+
+  // 사용자 정보를 데이터베이스에서 확인하여 세션 유효성 검증
+  const userFromDB = await client.parisuser.findFirst({
+    where: {
+      id: user.id,
+      OR: [{ role: "user" }, { role: "test" }],
+      activate: "true",
+    },
+    select: {
+      id: true,
+      session: true,
+      activate: true,
+    },
+  });
+
+  // 사용자가 존재하지 않거나 비활성화된 경우
+  if (!userFromDB) {
+    req.session.destroy();
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  // 세션 토큰이 일치하지 않는 경우 (중복 로그인 등)
+  // 단, 세션이 비어있는 경우는 허용 (새로고침 등)
+  if (userFromDB.session && userFromDB.session !== user.TTXD) {
+    console.log("Session mismatch detected:", {
+      dbSession: userFromDB.session,
+      currentSession: user.TTXD,
+    });
+    req.session.destroy();
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   req.session.save();
   const [levelSetup, sportsSetup, basicSetup] = await Promise.all([
     client.levelsetup.findUnique({
@@ -338,6 +385,10 @@ export const getServerSideProps = withSsrSession(async function ({
       data: {
         lastPageAt: new Date(),
         lastPage: "크로스",
+        // 세션 토큰이 비어있거나 현재 세션과 다른 경우에만 업데이트
+        ...(userFromDB.session !== user?.TTXD && {
+          session: user?.TTXD,
+        }),
       },
     }),
   ]);

@@ -128,6 +128,8 @@ export const PopupBanner: FC<props> = (props) => {
         // 백드롭 클릭 시 아무 동작 안 함 (순서대로 닫아야 함)
         e.stopPropagation();
       }}
+      // aria-hidden 문제 해결을 위한 속성 추가
+      aria-hidden={false}
     >
       <Box
         onClick={(e) => e.stopPropagation()}
@@ -135,6 +137,9 @@ export const PopupBanner: FC<props> = (props) => {
           position: "relative",
           width: isMobile ? "100vw" : "auto",
           maxWidth: isMobile ? "100vw" : "380px",
+          maxHeight: isMobile ? "100vh" : "auto",
+          display: "flex",
+          flexDirection: "column",
           animation: isClosing
             ? `${fadeOut} 0.3s ease-out`
             : `${fadeIn} 0.4s cubic-bezier(0.4, 0, 0.2, 1)`,
@@ -180,26 +185,28 @@ export const PopupBanner: FC<props> = (props) => {
             boxShadow: isMobile ? "none" : "0 20px 60px rgba(0, 0, 0, 0.5)",
             animation: `${slideInUp} 0.5s ease-out`,
             cursor: "pointer",
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             "&:hover": {
-              transform: "scale(1.02)",
+              transform: isMobile ? "none" : "scale(1.02)",
               transition: "transform 0.2s ease",
             },
           }}
         >
-          <Image
+          <img
             src={imageURL + currentBanner.url + imageURL2}
-            width={380}
-            height={546}
-            sizes="100vw"
-            placeholder="blur"
-            blurDataURL={`data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgwIiBoZWlnaHQ9IjU0NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzgwIiBoZWlnaHQ9IjU0NiIgZmlsbD0iIzIwMjAyMCIvPjwvc3ZnPg==`}
             alt={currentBanner.name || "popup"}
             style={{
               width: "100%",
               height: "auto",
               display: "block",
+              objectFit: "contain",
+              maxWidth: isMobile ? "100vw" : "380px",
+              maxHeight: isMobile ? "80vh" : "546px",
             }}
-            priority
+            loading="lazy"
           />
 
           {/* 페이지 인디케이터 (여러 배너가 있을 때만) */}
@@ -240,6 +247,8 @@ export const PopupBanner: FC<props> = (props) => {
             mt: isMobile ? 0 : 2,
             p: isMobile ? 2 : 0,
             animation: `${slideInUp} 0.6s ease-out`,
+            flexShrink: 0,
+            width: "100%",
           }}
         >
           <Button
@@ -305,6 +314,8 @@ export const PopupBanner: FC<props> = (props) => {
               fontWeight: 500,
               animation: `${fadeIn} 1s ease-out 0.5s both`,
               opacity: 0.8,
+              flexShrink: 0,
+              p: isMobile ? 1 : 0,
             }}
           >
             남은 배너: {remainingCount - 1}개 | ESC로 닫기

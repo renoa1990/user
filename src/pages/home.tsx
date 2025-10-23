@@ -150,7 +150,10 @@ const Home: NextPage<props> = (props) => {
                     alt="GGBET"
                     width={160}
                     height={60}
-                    style={{ width: "min(36vw, 180px)", height: "auto" }}
+                    style={{
+                      width: "min(36vw, 180px)",
+                      height: "auto",
+                    }}
                     priority
                   />
                 </Box>
@@ -301,7 +304,12 @@ export const getServerSideProps = withSsrSession(async function ({
   }
 
   // 세션 토큰이 일치하지 않는 경우 (중복 로그인 등)
+  // 단, 세션이 비어있는 경우는 허용 (새로고침 등)
   if (userFromDB.session && userFromDB.session !== user.TTXD) {
+    console.log("Session mismatch detected:", {
+      dbSession: userFromDB.session,
+      currentSession: user.TTXD,
+    });
     req.session.destroy();
     return {
       redirect: {
@@ -397,8 +405,10 @@ export const getServerSideProps = withSsrSession(async function ({
       data: {
         lastPageAt: new Date(),
         lastPage: "홈",
-        // 세션 토큰도 갱신하여 중복 로그인 방지
-        session: user?.TTXD,
+        // 세션 토큰이 비어있거나 현재 세션과 다른 경우에만 업데이트
+        ...(userFromDB.session !== user?.TTXD && {
+          session: user?.TTXD,
+        }),
       },
     }),
   ]);
