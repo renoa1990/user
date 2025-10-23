@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더미 배너 이미지 생성기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(56, 239, 125, 0.3);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .preview-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-item h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        canvas {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        canvas:hover {
+            transform: scale(1.02);
+        }
+
+        .info {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 191, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .download-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .download-info h3 {
+            margin-bottom: 10px;
+            color: #ffc107;
+        }
+
+        .download-info code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 더미 배너 이미지 생성기</h1>
+            <p>테스트용 배너 이미지를 즉시 생성하고 다운로드하세요</p>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button class="btn-primary" onclick="generateAll()">모든 배너 생성</button>
+                <button class="btn-success" onclick="downloadAll()">모두 다운로드</button>
+            </div>
+        </div>
+
+        <div class="preview-grid" id="previewGrid"></div>
+
+        <div class="download-info">
+            <h3>📥 사용 방법</h3>
+            <p>1. "모든 배너 생성" 버튼을 클릭하여 이미지를 생성합니다.</p>
+            <p>2. "모두 다운로드" 버튼을 클릭하거나 개별 이미지를 클릭하여 다운로드합니다.</p>
+            <p>3. 다운로드한 이미지를 <code>user/public/images/</code> 폴더에 저장합니다.</p>
+            <p>4. <code>http://localhost:3000/test-banner</code> 페이지에서 테스트합니다.</p>
+        </div>
+    </div>
+
+    <script>
+        const banners = [
+            {
+                id: 1,
+                title: '신규 회원 환영',
+                subtitle: '첫 충전 100% 보너스',
+                gradient: ['#667eea', '#764ba2'],
+                emoji: '🎁'
+            },
+            {
+                id: 2,
+                title: '스포츠 베팅',
+                subtitle: '최고 배당률 제공',
+                gradient: ['#f093fb', '#f5576c'],
+                emoji: '⚽'
+            },
+            {
+                id: 3,
+                title: '카지노 이벤트',
+                subtitle: '매일 보너스 지급',
+                gradient: ['#11998e', '#38ef7d'],
+                emoji: '🎰'
+            }
+        ];
+
+        function generateBanner(banner) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 380;
+            canvas.height = 546;
+            const ctx = canvas.getContext('2d');
+
+            // 그라데이션 배경
+            const gradient = ctx.createLinearGradient(0, 0, 380, 546);
+            gradient.addColorStop(0, banner.gradient[0]);
+            gradient.addColorStop(1, banner.gradient[1]);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 380, 546);
+
+            // 패턴 오버레이
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let i = 0; i < 20; i++) {
+                for (let j = 0; j < 30; j++) {
+                    if ((i + j) % 2 === 0) {
+                        ctx.fillRect(i * 20, j * 20, 10, 10);
+                    }
+                }
+            }
+
+            // 이모지
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(banner.emoji, 190, 180);
+
+            // 제목
+            ctx.font = 'bold 36px Arial';
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fillText(banner.title, 190, 320);
+
+            // 부제목
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText(banner.subtitle, 190, 370);
+
+            // 장식 라인
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(90, 410);
+            ctx.lineTo(290, 410);
+            ctx.stroke();
+
+            // 하단 텍스트
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillText('지금 바로 참여하세요!', 190, 460);
+
+            // 배너 번호
+            ctx.font = 'bold 18px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.fillText(`Banner ${banner.id}`, 190, 510);
+
+            return canvas;
+        }
+
+        function generateAll() {
+            const grid = document.getElementById('previewGrid');
+            grid.innerHTML = '';
+
+            banners.forEach(banner => {
+                const canvas = generateBanner(banner);
+                
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                
+                const title = document.createElement('h3');
+                title.textContent = `배너 ${banner.id}: ${banner.title}`;
+                
+                const info = document.createElement('div');
+                info.className = 'info';
+                info.innerHTML = `
+                    <strong>파일명:</strong> banner-test-${banner.id}.png<br>
+                    <strong>크기:</strong> 380 x 546px<br>
+                    <strong>클릭하여 다운로드</strong>
+                `;
+                
+                canvas.onclick = () => downloadCanvas(canvas, `banner-test-${banner.id}.png`);
+                
+                item.appendChild(title);
+                item.appendChild(canvas);
+                item.appendChild(info);
+                grid.appendChild(item);
+            });
+        }
+
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadAll() {
+            const canvases = document.querySelectorAll('canvas');
+            if (canvases.length === 0) {
+                alert('먼저 "모든 배너 생성" 버튼을 클릭하세요!');
+                return;
+            }
+            
+            canvases.forEach((canvas, index) => {
+                setTimeout(() => {
+                    downloadCanvas(canvas, `banner-test-${index + 1}.png`);
+                }, index * 500); // 0.5초 간격으로 다운로드
+            });
+        }
+
+        // 페이지 로드 시 자동 생성
+        window.onload = generateAll;
+    </script>
+</body>
+</html>
+
+
+
+
+

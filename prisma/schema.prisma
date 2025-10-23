@@ -1,0 +1,1491 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Parisuser {
+  id            Int       @id @default(autoincrement())
+  userId        String    @unique
+  nickName      String    @unique
+  BGid          Int?
+  password      String?
+  bankName      String?
+  bankNumber    String?
+  name          String?
+  birth         String?
+  phone         String?
+  bankPassword  String?
+  updateAt      DateTime?
+  money         Int       @default(0)
+  point         Int       @default(0)
+  lv            String    @default("1")
+  depositCount  Int       @default(0)
+  deposit       BigInt    @default(0)
+  withdrawCount Int       @default(0)
+  withdraw      BigInt    @default(0)
+  total         BigInt    @default(0)
+  memo          String?   @db.Text
+  activate      String    @default("null")
+  role          String    @default("user")
+  ip            String    @default("")
+  domain        String    @default("")
+  device        String    @default("")
+
+  blacklist Boolean @default(false)
+  auto_Bank Boolean @default(false)
+
+  cross_1_block   Boolean @default(false)
+  cross_2_block   Boolean @default(false)
+  special_1_block Boolean @default(false)
+  special_2_block Boolean @default(false)
+  live_1_block    Boolean @default(false)
+  live_2_block    Boolean @default(false)
+  minigame_block  Boolean @default(false)
+  casino_block    Boolean @default(false)
+  contact_block   Boolean @default(false)
+
+  //가입 정보
+  createip     String    @default("")
+  createdomain String    @default("")
+  createdevice String    @default("")
+  createAt     DateTime  @default(now())
+  createcity   String    @default("")
+  createcoutry String    @default("")
+  lastPage     String?
+  lastPageAt   DateTime?
+  betTotal     BigInt    @default(0)
+  lastBet      DateTime?
+  betCount     Int       @default(0)
+  persnalBank  String    @default("")
+
+  contact           contact[]
+  message           message[]
+  infomationCheck   infomationCheck[]
+  Money             Money[]
+  infomation        infomation[]
+  moneyLog          moneyLog[]
+  joinCode          String?
+  Code              Code?               @relation("usercode", fields: [joinCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  sellerCode        Code[]              @relation("sellercode")
+  headseller        sellerTree?         @relation("headseller", fields: [headsellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  headsellerId      Int?                @unique
+  bodyseller        sellerTree[]        @relation("bodyseller")
+  invite            invite?             @relation("invite", fields: [inviteId], references: [id])
+  inviteId          Int?
+  invites           invite[]            @relation("inviteusers")
+  IpLog             IpLog[]
+  pointLog          pointLog[]
+  session           String              @default("")
+  levelStup         levelsetup          @relation("levelsetup", fields: [lv], references: [lv])
+  bettinglist       bettinglist[]       @relation("bettinglist")
+  bettingData       bettingData?        @relation("bettingData", fields: [bettingDataId], references: [id])
+  bettingDataId     Int?
+  bannerOff         bannerOff[]         @relation("userBannerOff")
+  calendarEventData calendarEventData[] @relation("calendarEvent")
+  eventPoint        eventPoint[]        @relation("eventpoint")
+  adminInbox        adminInbox[]        @relation("adminInbox")
+  bankLog           bankLog[]           @relation("banklog")
+
+  @@index([joinCode])
+  @@index([headsellerId])
+  @@index([inviteId])
+  @@index([lv])
+  @@index([bettingDataId])
+}
+
+model bettingData {
+  id         Int       @id @default(autoincrement())
+  crossBet   BigInt    @default(0)
+  crossWin   BigInt    @default(0)
+  crossCount Int       @default(0)
+  crossAt    DateTime?
+
+  specialBet   BigInt    @default(0)
+  specialWin   BigInt    @default(0)
+  specialCount Int       @default(0)
+  specialAt    DateTime?
+
+  liveBet   BigInt    @default(0)
+  liveWin   BigInt    @default(0)
+  liveCount Int       @default(0)
+  liveAt    DateTime?
+
+  casinoBet   BigInt    @default(0)
+  casinoWin   BigInt    @default(0)
+  casinoCount Int       @default(0)
+  casinoAt    DateTime?
+
+  powerballBet   BigInt    @default(0)
+  powerballWin   BigInt    @default(0)
+  powerballCount Int       @default(0)
+  powerballAt    DateTime?
+
+  powerLadderBet   BigInt    @default(0)
+  powerLadderWin   BigInt    @default(0)
+  powerLadderCount Int       @default(0)
+  powerLadderAt    DateTime?
+
+  kinoLadderBet   BigInt    @default(0)
+  kinoLadderWin   BigInt    @default(0)
+  kinoLadderCount Int       @default(0)
+  kinoLadderAt    DateTime?
+
+  eos5Bet   BigInt    @default(0)
+  eos5Win   BigInt    @default(0)
+  eos5Count Int       @default(0)
+  eos5At    DateTime?
+
+  eos4Bet   BigInt    @default(0)
+  eos4Win   BigInt    @default(0)
+  eos4Count Int       @default(0)
+  eos4At    DateTime?
+
+  eos3Bet   BigInt    @default(0)
+  eos3Win   BigInt    @default(0)
+  eos3Count Int       @default(0)
+  eos3At    DateTime?
+
+  eos2Bet   BigInt    @default(0)
+  eos2Win   BigInt    @default(0)
+  eos2Count Int       @default(0)
+  eos2At    DateTime?
+
+  eos1Bet   BigInt    @default(0)
+  eos1Win   BigInt    @default(0)
+  eos1Count Int       @default(0)
+  eos1At    DateTime?
+
+  starladder1Bet   BigInt    @default(0)
+  starladder1Win   BigInt    @default(0)
+  starladder1Count Int       @default(0)
+  starladder1At    DateTime?
+
+  starladder2Bet   BigInt    @default(0)
+  starladder2Win   BigInt    @default(0)
+  starladder2Count Int       @default(0)
+  starladder2At    DateTime?
+
+  starladder3Bet   BigInt    @default(0)
+  starladder3Win   BigInt    @default(0)
+  starladder3Count Int       @default(0)
+  starladder3At    DateTime?
+
+  Parisuser Parisuser[] @relation("bettingData")
+}
+
+model bettinglist {
+  id          Int       @id @default(autoincrement())
+  parisuser   Parisuser @relation("bettinglist", fields: [parisuserId], references: [id])
+  parisuserId Int
+
+  gameCode   String
+  game_Event String
+  betTime    DateTime @default(now())
+
+  totalOdd String
+  betPrice Int
+  winPrice Int
+  payment  Int    @default(0)
+
+  betDetail  betDetail[] @relation("bettingdetail")
+  status     String      @default("ready")
+  userdelete Boolean     @default(false)
+
+  blackBetting Boolean @default(false)
+  adminCheck   Boolean @default(false)
+
+  cancleUser String?      @default("")
+  casinoTxid String?
+  eventPoint eventPoint[] @relation("eventPoint")
+  Code       Code?        @relation("codeBettinglist", fields: [codeName], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  codeName   String?
+  pointLog   pointLog[]   @relation("bettinglistPointlog")
+
+  @@index([codeName])
+  @@index([parisuserId])
+}
+
+model betDetail {
+  id            Int         @id @default(autoincrement())
+  bettinglist   bettinglist @relation("bettingdetail", fields: [bettinglistId], references: [id])
+  bettinglistId Int
+
+  game_Event String //축구 야구 농구 파워볼 사다리 등
+  game_Name  String //리그명,nba 실시간, 몇회차 파워볼 등
+  game_Type  String //승무패 핸디캡 언더오버 ,파워볼홀짝,일반볼 홀짝 등
+  game_Time  DateTime
+  game_Memo  String?
+
+  team_home String?
+  team_tie  String? //무승부 배당 또는 핸디캡 언오버 기준점
+  team_away String?
+
+  Odds_home String?
+  Odds_tie  String?
+  Odds_away String?
+
+  score_home String?
+  score_away String?
+
+  PickOdds String
+  Pick     String //home,tie,away 
+  result   String? @default("")
+  status   String  @default("ready")
+
+  powerball       powerball?     @relation("powerball", fields: [powerballId], references: [id])
+  powerballId     Int?
+  powerladder     powerLadder?   @relation("powerladder", fields: [powerladderId], references: [id])
+  powerladderId   Int?
+  kinoLadder      kinoLadder?    @relation("kinoladder", fields: [kinoLadderId], references: [id])
+  kinoLadderId    Int?
+  EosPowerball5   EosPowerball5? @relation("eospowerball5", fields: [eosPowerball5Id], references: [id])
+  eosPowerball5Id Int?
+  EosPowerball4   EosPowerball4? @relation("eospowerball4", fields: [eosPowerball4Id], references: [id])
+  eosPowerball4Id Int?
+  EosPowerball3   EosPowerball3? @relation("eospowerball3", fields: [eosPowerball3Id], references: [id])
+  eosPowerball3Id Int?
+  EosPowerball2   EosPowerball2? @relation("eospowerball2", fields: [eosPowerball2Id], references: [id])
+  eosPowerball2Id Int?
+  EosPowerball1   EosPowerball1? @relation("eospowerball1", fields: [eosPowerball1Id], references: [id])
+  eosPowerball1Id Int?
+  cross           cross?         @relation("cross", fields: [crossId], references: [id])
+  crossId         Int?
+  special         special?       @relation("special", fields: [specialId], references: [id])
+  specialId       Int?
+  live            live?          @relation("live", fields: [liveId], references: [id])
+  liveId          Int?
+
+  gameMemo gameMemo? @relation("detailGameMemo", fields: [game_Memo, game_Event], references: [game_Memo, game_Event], onDelete: NoAction)
+
+  leagueName    league? @relation("detailLeague", fields: [game_Name, game_Event], references: [name, game_Event], onDelete: SetNull, onUpdate: NoAction)
+  home_TeamName Team?   @relation("detailTeamHome", fields: [team_home, game_Event], references: [name, game_Event], onDelete: SetNull, onUpdate: NoAction)
+  away_TeamName Team?   @relation("detailTeamAway", fields: [team_away, game_Event], references: [name, game_Event], onDelete: SetNull, onUpdate: NoAction)
+
+  StarLadder1   StarLadder1? @relation("starladder1", fields: [starLadder1Id], references: [id])
+  starLadder1Id Int?
+  StarLadder2   StarLadder2? @relation("starladder2", fields: [starLadder2Id], references: [id])
+  starLadder2Id Int?
+  StarLadder3   StarLadder3? @relation("starladder3", fields: [starLadder3Id], references: [id])
+  starLadder3Id Int?
+
+  @@index([game_Memo, game_Event])
+  @@index([team_away, game_Event])
+  @@index([team_home, game_Event])
+  @@index([game_Name, game_Event])
+  @@index([bettinglistId])
+  @@index([powerballId])
+  @@index([powerladderId])
+  @@index([kinoLadderId])
+  @@index([eosPowerball5Id])
+  @@index([eosPowerball4Id])
+  @@index([eosPowerball3Id])
+  @@index([eosPowerball2Id])
+  @@index([eosPowerball1Id])
+  @@index([crossId])
+  @@index([specialId])
+  @@index([liveId])
+  @@index([starLadder1Id])
+  @@index([starLadder2Id])
+  @@index([starLadder3Id])
+}
+
+model sellerTree {
+  id            Int             @id @default(autoincrement())
+  seller        Parisuser?      @relation("headseller")
+  ShereType     String?         @default("deposit")
+  Shere         Int             @default(0)
+  sportsShere   Float           @default(0)
+  minigameShere Float           @default(0)
+  casinoShere   Float           @default(0)
+  headseller    Parisuser?      @relation("bodyseller", fields: [headsellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  headsellerId  Int?
+  sellerPayment sellerPayment[] @relation("sellerpay")
+
+  deposit  BigInt @default(0)
+  withdraw BigInt @default(0)
+
+  // 캐시 필드 (성능 최적화)
+  topSellerId Int? // 최상위 총판 ID
+  depth       Int  @default(0) // 계층 깊이
+
+  @@index([headsellerId])
+  @@index([topSellerId])
+}
+
+model sellerPayment {
+  id           Int         @id @default(autoincrement())
+  createAt     DateTime    @default(now())
+  deposit      Int
+  withdraw     Int
+  users        Int
+  shere        Int
+  shereType    String
+  sellerPoint  Int
+  salePayment  Int
+  headSeller   String
+  payment      Int?
+  paymentCheck Boolean
+  paymentAt    DateTime?
+  sellerTree   sellerTree? @relation("sellerpay", fields: [sellerTreeId], references: [id], onDelete: NoAction)
+  sellerTreeId Int?
+  checkUser    String      @default("")
+  paymentUser  String      @default("")
+
+  @@index([sellerTreeId])
+}
+
+model invite {
+  id         Int         @id @default(autoincrement())
+  Parisuser  Parisuser[] @relation("invite")
+  inviteUser String
+
+  inviteUsers Parisuser @relation("inviteusers", fields: [inviteUser], references: [userId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([inviteUser])
+}
+
+model Code {
+  id                    Int        @id @default(autoincrement())
+  code                  String     @unique
+  sellerUser            Parisuser? @relation("sellercode", fields: [sellerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sellerId              Int
+  codeActivate          Boolean    @default(false)
+  bonusActivate         Boolean    @default(false)
+  joinBonus             Int        @default(0)
+  firstBonus            Int        @default(0)
+  everythingBonus       Int        @default(0)
+  casinoJoinBonus       Int        @default(0)
+  casinoFirstBonus      Int        @default(0)
+  casinoEverythingBonus Int        @default(0)
+
+  memo        String
+  users       Parisuser[]   @relation("usercode")
+  money       Money[]       @relation("codeMoney")
+  battinglist bettinglist[] @relation("codeBettinglist")
+
+  @@index([sellerId])
+}
+
+model Money {
+  id              Int        @id @default(autoincrement())
+  Parisuser       Parisuser  @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId     Int
+  userMoney       Int
+  userPoint       Int
+  type            String
+  Money           Int
+  Point           Int
+  pointType       String     @default("")
+  createAt        DateTime   @default(now())
+  updateAt        DateTime?
+  admincheck      Boolean    @default(false)
+  confirm         Boolean?
+  confirmUser     String?
+  userDelete      Boolean    @default(false)
+  bankName        String?
+  bankNumber      String?
+  name            String?
+  fee             Int        @default(0)
+  sportsRolling   Int?
+  minigameRolling Int?
+  casinoRolling   Int?
+  lastDeposit     Int?
+  lastBonusType   String?
+  lastBonus       Int?
+  moneyLog        moneyLog[]
+  pointLog        pointLog[]
+  Code            Code?      @relation("codeMoney", fields: [codeName], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  codeName        String?
+
+  @@index([parisuserId])
+  @@index([codeName])
+}
+
+model contact {
+  id          Int       @id @default(autoincrement())
+  Parisuser   Parisuser @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId Int
+  title       String
+  text        String    @db.Text
+  createAt    DateTime  @default(now())
+  updateAt    DateTime?
+  adminTitle  String?
+  adminText   String?   @db.Text
+  userCheck   Boolean   @default(false)
+  userDelete  Boolean   @default(false)
+  adminCheck  Boolean   @default(false)
+
+  @@index([parisuserId])
+}
+
+model message {
+  id          Int       @id @default(autoincrement())
+  Parisuser   Parisuser @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId Int
+  title       String
+  text        String    @db.Text
+  createAt    DateTime  @default(now())
+  updateAt    DateTime?
+  userCheck   Boolean   @default(false)
+  userDelete  Boolean   @default(false)
+
+  @@index([parisuserId])
+}
+
+model infomation {
+  id              Int               @id @default(autoincrement())
+  title           String
+  text            String            @db.Text
+  createAt        DateTime          @default(now())
+  updateAt        DateTime?
+  open            Boolean           @default(true)
+  infomationCheck infomationCheck[]
+  parisuser       Parisuser         @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId     Int
+  hit             Int               @default(0)
+
+  @@index([parisuserId])
+}
+
+model infomationCheck {
+  id           Int        @id @default(autoincrement())
+  infomation   infomation @relation(fields: [infomationId], references: [id], onDelete: Cascade)
+  infomationId Int
+  parisuser    Parisuser  @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId  Int
+  userCheck    Boolean
+  createAt     DateTime   @default(now())
+
+  @@index([parisuserId])
+  @@index([infomationId])
+}
+
+model IpLog {
+  id          Int        @id @default(autoincrement())
+  parisuser   Parisuser? @relation(fields: [parisuserId], references: [id])
+  parisuserId Int?
+  ip          String
+  domain      String
+  device      String
+  contry_code String
+  state       String
+  status      Boolean
+  memo        String
+  createAt    DateTime   @default(now())
+
+  category String?
+
+  @@index([parisuserId])
+}
+
+model moneyLog {
+  id          Int       @id @default(autoincrement())
+  parisuser   Parisuser @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId Int
+  type        String
+  memo        String?
+  beforeMoney Int
+  money       Int
+  afterMoney  Int
+  createAt    DateTime  @default(now())
+  confirmUser String
+  Money       Money?    @relation(fields: [moneyId], references: [id])
+  moneyId     Int?
+
+  @@index([parisuserId])
+  @@index([moneyId])
+}
+
+model pointLog {
+  id          Int       @id @default(autoincrement())
+  parisuser   Parisuser @relation(fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId Int
+  type        String
+  memo        String?
+  beforePoint Int
+  point       Int
+  afterPoint  Int
+  createAt    DateTime  @default(now())
+  confirmUser String
+
+  Money   Money? @relation(fields: [moneyId], references: [id], onDelete: Cascade)
+  moneyId Int?
+
+  BettingList   bettinglist? @relation("bettinglistPointlog", fields: [bettinglistId], references: [id], onDelete: Cascade)
+  bettinglistId Int?
+
+  sellerPayment Boolean   @default(false)
+  paymentAt     DateTime?
+
+  @@index([parisuserId])
+  @@index([moneyId])
+  @@index([bettinglistId])
+}
+
+model bankLog {
+  id          Int       @id @default(autoincrement())
+  parisuser   Parisuser @relation("banklog", fields: [parisuserId], references: [id], onDelete: Cascade)
+  parisuserId Int
+  type        String? //개인등록계좌   //사이트 등록계좌
+  bank        String? //안내계좌
+  answer      String //수동 자동
+  createAt    DateTime  @default(now())
+
+  @@index([parisuserId])
+}
+
+model ipblock {
+  id          Int      @id @default(autoincrement())
+  ip          String   @unique
+  createAt    DateTime @default(now())
+  memo        String   @default("")
+  confirmUser String
+}
+
+model adminipconfirm {
+  id          Int      @id @default(autoincrement())
+  ip          String   @unique
+  createAt    DateTime @default(now())
+  memo        String   @default("")
+  confirmUser String
+}
+
+////////////////////      셋업      //////////////////////
+
+model BasicSetup {
+  id                 Int     @id @default(autoincrement())
+  open               Boolean @default(false)
+  adminNickname      String  @default("")
+  adminIpBlock       Boolean @default(false)
+  foreignBlock       Boolean @default(false)
+  userIpBlock        Boolean @default(false)
+  userIpAutoBlock    Boolean @default(false)
+  userIpAutoBlockNum Int     @default(0)
+  serverDown         Boolean @default(false)
+  sportsBlock        Boolean @default(false)
+  minigameBlock      Boolean @default(false)
+  casinoBlock        Boolean @default(false)
+}
+
+model MoneySetup {
+  id              Int     @id @default(autoincrement())
+  open            Boolean @default(false)
+  minDeposit      Int     @default(0)
+  depositUnit     Int     @default(0)
+  minWithdraw     Int     @default(0)
+  maxWithdraw     Int     @default(0)
+  withdrawCheck   Boolean @default(false)
+  withdrawTime    Int     @default(0)
+  pointLimit      Boolean @default(false)
+  MaxPoint        Int     @default(0)
+  LoginPointCheck Boolean @default(false)
+  LoginPoint      Int     @default(0)
+  pointChange     Int     @default(0)
+  bonusSetup      Boolean @default(false)
+  bankSetup       Boolean @default(false)
+
+  withdrawLimitCheck Boolean @default(false)
+  withdrawLimitNum   Int     @default(0)
+  withdrawLimitPrice Int     @default(0)
+}
+
+model levelsetup {
+  id                     Int         @id @default(autoincrement())
+  lv                     String      @unique
+  lvuser                 Parisuser[] @relation("levelsetup")
+  joinBonus              Int         @default(0)
+  firstBonus             Int         @default(0)
+  everythingBonus        Int         @default(0)
+  casinoJoinBonus        Int         @default(0)
+  casinoFirstBonus       Int         @default(0)
+  casinoEverythingBonus  Int         @default(0)
+  bank                   String      @default("")
+  minigame_minbet        String      @default("0")
+  minigame_maxbet        String      @default("0")
+  minigame_maxresult     String      @default("0")
+  cross_minbet           String      @default("5000")
+  cross_maxbet           String      @default("2000000")
+  cross_maxresult        String      @default("5000000")
+  cross_axis_maxresult   String      @default("10000000")
+  cross_1_minbet         String      @default("5000")
+  cross_1_maxbet         String      @default("500000")
+  cross_1_maxresult      String      @default("3000000")
+  special_minbet         String      @default("5000")
+  special_maxbet         String      @default("2000000")
+  special_maxresult      String      @default("5000000")
+  special_axis_maxresult String      @default("10000000")
+  special_1_minbet       String      @default("5000")
+  special_1_maxbet       String      @default("1000000")
+  special_1_maxresult    String      @default("3000000")
+  live_minbet            String      @default("5000")
+  live_maxbet            String      @default("2000000")
+  live_maxresult         String      @default("5000000")
+  live_axis_maxresult    String      @default("10000000")
+  live_1_minbet          String      @default("5000")
+  live_1_maxbet          String      @default("1000000")
+  live_1_maxresult       String      @default("3000000")
+  lose_point_user        String      @default("1")
+  lose_point_invite      String      @default("1")
+}
+
+model UserSetup {
+  id                   Int     @id @default(autoincrement())
+  open                 Boolean @default(false)
+  register             Boolean @default(false)
+  invite               Boolean @default(false)
+  duplicate            Boolean @default(false)
+  phone                Boolean @default(false)
+  bank                 Boolean @default(false)
+  pointCheck           Boolean @default(false)
+  point                String  @default("0")
+  basicLv              String  @default("1")
+  autoConfirm          Boolean @default(false)
+  registerMessageTitle String  @default("")
+  registerMessage      String? @db.Text
+}
+
+model kinoLadderSetup {
+  id              Int     @id @default(autoincrement())
+  open            Boolean @default(false)
+  kinoLadderCheck Boolean @default(false)
+  game_odd_left   String  @default("0")
+  game_odd_right  String  @default("0")
+  game_odd_line3  String  @default("0")
+  game_odd_line4  String  @default("0")
+  game_odd_home   String  @default("0")
+  game_odd_away   String  @default("0")
+}
+
+model PowerladderSetup {
+  id               Int     @id @default(autoincrement())
+  open             Boolean @default(false)
+  powerladderCheck Boolean @default(false)
+  game_odd_left    String  @default("0")
+  game_odd_right   String  @default("0")
+  game_odd_line3   String  @default("0")
+  game_odd_line4   String  @default("0")
+  game_odd_home    String  @default("0")
+  game_odd_away    String  @default("0")
+}
+
+model PowerballSetup {
+  id                    Int     @id @default(autoincrement())
+  open                  Boolean @default(false)
+  powerballCheck        Boolean @default(false)
+  game1_odd_home        String  @default("0")
+  game1_odd_away        String  @default("0")
+  game1_odd_under       String  @default("0")
+  game1_odd_over        String  @default("0")
+  game2_odd_home        String  @default("0")
+  game2_odd_away        String  @default("0")
+  game2_odd_under       String  @default("0")
+  game2_odd_over        String  @default("0")
+  game3_check           Boolean @default(false)
+  game3_odd_small       String  @default("0")
+  game3_odd_medium      String  @default("0")
+  game3_odd_large       String  @default("0")
+  game4_check           Boolean @default(false)
+  game4_odd_home_under  String  @default("0")
+  game4_odd_home_over   String  @default("0")
+  game4_odd_away_under  String  @default("0")
+  game4_odd_away_over   String  @default("0")
+  game5_check           Boolean @default(false)
+  game5_odd_home_small  String  @default("0")
+  game5_odd_home_medium String  @default("0")
+  game5_odd_home_large  String  @default("0")
+  game5_odd_away_small  String  @default("0")
+  game5_odd_away_medium String  @default("0")
+  game5_odd_away_large  String  @default("0")
+}
+
+model minigameSetup {
+  id                   Int     @id @default(autoincrement())
+  open                 Boolean @default(false)
+  battingCtuSec        String  @default("0")
+  anotherMinigameCheck Boolean @default(false)
+  anotherMinigameNum   String  @default("0")
+}
+
+model EosPowerballSetup {
+  id               Int     @id @default(autoincrement())
+  open             Boolean @default(false)
+  Eos5Check        Boolean @default(false)
+  Eos4Check        Boolean @default(false)
+  Eos3Check        Boolean @default(false)
+  Eos2Check        Boolean @default(false)
+  Eos1Check        Boolean @default(false)
+  game1_odd_home   String  @default("0")
+  game1_odd_away   String  @default("0")
+  game1_odd_under  String  @default("0")
+  game1_odd_over   String  @default("0")
+  game2_odd_home   String  @default("0")
+  game2_odd_away   String  @default("0")
+  game2_odd_under  String  @default("0")
+  game2_odd_over   String  @default("0")
+  game3_check      Boolean @default(false)
+  game3_odd_small  String  @default("0")
+  game3_odd_medium String  @default("0")
+  game3_odd_large  String  @default("0")
+  game4_check      Boolean @default(false)
+  game4_odd        String  @default("0")
+}
+
+model StarladderSetup {
+  id               Int     @id @default(autoincrement())
+  open             Boolean @default(false)
+  Starladder1Check Boolean @default(false)
+  Starladder2Check Boolean @default(false)
+  Starladder3Check Boolean @default(false)
+  game_odd_left    String  @default("0")
+  game_odd_right   String  @default("0")
+  game_odd_line3   String  @default("0")
+  game_odd_line4   String  @default("0")
+  game_odd_home    String  @default("0")
+  game_odd_away    String  @default("0")
+}
+
+model SportsSetup {
+  id   Int     @id @default(autoincrement())
+  open Boolean @default(false)
+
+  cross_bonus_odds   Boolean @default(false)
+  special_bonus_odds Boolean @default(false)
+  live_bonus_odds    Boolean @default(false)
+
+  bonus_odds_1  String @default("1.00")
+  bonus_odds_2  String @default("1.00")
+  bonus_odds_3  String @default("1.03")
+  bonus_odds_4  String @default("1.03")
+  bonus_odds_5  String @default("1.05")
+  bonus_odds_6  String @default("1.05")
+  bonus_odds_7  String @default("1.08")
+  bonus_odds_8  String @default("1.08")
+  bonus_odds_9  String @default("1.08")
+  bonus_odds_10 String @default("1.08")
+
+  single_odds_down String  @default("0.00")
+  single_cross     Boolean @default(true)
+  single_special   Boolean @default(true)
+  single_live      Boolean @default(true)
+
+  cancle_min      String @default("30")
+  cancle_PlayTime String @default("20")
+  cancle_count    String @default("3")
+
+  axisBet_count String @default("2")
+  combi_max     String @default("10")
+  combi_odds    String @default("100")
+
+  soccer_combi_1 Boolean @default(true)
+  soccer_combi_2 Boolean @default(true)
+  soccer_combi_3 Boolean @default(true)
+  soccer_combi_4 Boolean @default(false)
+  soccer_combi_5 Boolean @default(false)
+
+  basketball_combi_1 Boolean @default(true)
+  basketball_combi_2 Boolean @default(false)
+  basketball_combi_3 Boolean @default(false)
+
+  baseball_combi_1 Boolean @default(true)
+  baseball_combi_2 Boolean @default(false)
+  baseball_combi_3 Boolean @default(false)
+
+  volleyball_combi_1 Boolean @default(true)
+  volleyball_combi_2 Boolean @default(true)
+  volleyball_combi_3 Boolean @default(true)
+
+  other_combi_1 Boolean @default(true)
+  other_combi_2 Boolean @default(true)
+  other_combi_3 Boolean @default(true)
+  other_combi_4 Boolean @default(false)
+  other_combi_5 Boolean @default(false)
+
+  losePoint_cross   Boolean @default(true)
+  losePoint_special Boolean @default(true)
+  losePoint_live    Boolean @default(true)
+  losePoint_folder  String  @default("2")
+}
+
+model CrossSetup {
+  id                       Int     @id @default(autoincrement())
+  open                     Boolean @default(false)
+  match_odds_soccer        String  @default("97")
+  match_odds_baseball      String  @default("97")
+  match_odds_basketball    String  @default("97")
+  match_odds_volleyball    String  @default("97")
+  match_odds_other         String  @default("97")
+  unover_odds_soccer       String  @default("97")
+  unover_odds_baseball     String  @default("97")
+  unover_odds_basketball   String  @default("97")
+  unover_odds_volleyball   String  @default("97")
+  unover_odds_other        String  @default("97")
+  handicap_odds_soccer     String  @default("97")
+  handicap_odds_baseball   String  @default("97")
+  handicap_odds_basketball String  @default("97")
+  handicap_odds_volleyball String  @default("97")
+  handicap_odds_other      String  @default("97")
+}
+
+model SpecialSetup {
+  id   Int     @id @default(autoincrement())
+  open Boolean @default(false)
+
+  match_odds_soccer        String @default("97")
+  match_odds_baseball      String @default("97")
+  match_odds_basketball    String @default("97")
+  match_odds_volleyball    String @default("97")
+  match_odds_other         String @default("97")
+  unover_odds_soccer       String @default("97")
+  unover_odds_baseball     String @default("97")
+  unover_odds_basketball   String @default("97")
+  unover_odds_volleyball   String @default("97")
+  unover_odds_other        String @default("97")
+  handicap_odds_soccer     String @default("97")
+  handicap_odds_baseball   String @default("97")
+  handicap_odds_basketball String @default("97")
+  handicap_odds_volleyball String @default("97")
+  handicap_odds_other      String @default("97")
+}
+
+model LiveSetup {
+  id   Int     @id @default(autoincrement())
+  open Boolean @default(false)
+
+  match_odds_soccer        String @default("97")
+  match_odds_baseball      String @default("97")
+  match_odds_basketball    String @default("97")
+  match_odds_volleyball    String @default("97")
+  match_odds_other         String @default("97")
+  unover_odds_soccer       String @default("97")
+  unover_odds_baseball     String @default("97")
+  unover_odds_basketball   String @default("97")
+  unover_odds_volleyball   String @default("97")
+  unover_odds_other        String @default("97")
+  handicap_odds_soccer     String @default("97")
+  handicap_odds_baseball   String @default("97")
+  handicap_odds_basketball String @default("97")
+  handicap_odds_volleyball String @default("97")
+  handicap_odds_other      String @default("97")
+}
+
+////////////////////       서비스     ////////////////////////
+model powerball {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home        String?
+  game1_odd_away        String?
+  game1_odd_under       String?
+  game1_odd_over        String?
+  game2_odd_home        String?
+  game2_odd_away        String?
+  game2_odd_under       String?
+  game2_odd_over        String?
+  game3_odd_small       String?
+  game3_odd_medium      String?
+  game3_odd_large       String?
+  game4_odd_home_under  String?
+  game4_odd_home_over   String?
+  game4_odd_away_under  String?
+  game4_odd_away_over   String?
+  game5_odd_home_small  String?
+  game5_odd_home_medium String?
+  game5_odd_home_large  String?
+  game5_odd_away_small  String?
+  game5_odd_away_medium String?
+  game5_odd_away_large  String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean     @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+  result_ball_mix         String?
+  result_ball_mix_size    String?
+  betDetail               betDetail[] @relation("powerball")
+}
+
+model powerLadder {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game_odd_left  String?
+  game_odd_right String?
+  game_odd_line3 String?
+  game_odd_line4 String?
+  game_odd_home  String?
+  game_odd_away  String?
+
+  result_exception Boolean @default(false)
+  result_line      String?
+  result_rl        String?
+  result_oe        String?
+
+  betDetail betDetail[] @relation("powerladder")
+}
+
+model kinoLadder {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game_odd_left  String?
+  game_odd_right String?
+  game_odd_line3 String?
+  game_odd_line4 String?
+  game_odd_home  String?
+  game_odd_away  String?
+
+  result_exception Boolean @default(false)
+  result_line      String?
+  result_rl        String?
+  result_oe        String?
+
+  betDetail betDetail[] @relation("kinoladder")
+}
+
+model EosPowerball5 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home      String?
+  game1_odd_away      String?
+  game1_odd_under     String?
+  game1_odd_over      String?
+  game2_odd_home      String?
+  game2_odd_away      String?
+  game2_odd_under     String?
+  game2_odd_over      String?
+  game3_odd_small     String?
+  game3_odd_medium    String?
+  game3_odd_large     String?
+  game4_odd_powerball String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+
+  betDetail betDetail[] @relation("eospowerball5")
+}
+
+model EosPowerball4 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home      String?
+  game1_odd_away      String?
+  game1_odd_under     String?
+  game1_odd_over      String?
+  game2_odd_home      String?
+  game2_odd_away      String?
+  game2_odd_under     String?
+  game2_odd_over      String?
+  game3_odd_small     String?
+  game3_odd_medium    String?
+  game3_odd_large     String?
+  game4_odd_powerball String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+
+  betDetail betDetail[] @relation("eospowerball4")
+}
+
+model EosPowerball3 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home      String?
+  game1_odd_away      String?
+  game1_odd_under     String?
+  game1_odd_over      String?
+  game2_odd_home      String?
+  game2_odd_away      String?
+  game2_odd_under     String?
+  game2_odd_over      String?
+  game3_odd_small     String?
+  game3_odd_medium    String?
+  game3_odd_large     String?
+  game4_odd_powerball String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+
+  betDetail betDetail[] @relation("eospowerball3")
+}
+
+model EosPowerball2 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home      String?
+  game1_odd_away      String?
+  game1_odd_under     String?
+  game1_odd_over      String?
+  game2_odd_home      String?
+  game2_odd_away      String?
+  game2_odd_under     String?
+  game2_odd_over      String?
+  game3_odd_small     String?
+  game3_odd_medium    String?
+  game3_odd_large     String?
+  game4_odd_powerball String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+
+  betDetail betDetail[] @relation("eospowerball2")
+}
+
+model EosPowerball1 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game1_odd_home      String?
+  game1_odd_away      String?
+  game1_odd_under     String?
+  game1_odd_over      String?
+  game2_odd_home      String?
+  game2_odd_away      String?
+  game2_odd_under     String?
+  game2_odd_over      String?
+  game3_odd_small     String?
+  game3_odd_medium    String?
+  game3_odd_large     String?
+  game4_odd_powerball String?
+
+  result_powerball        String?
+  result_ball             String?
+  result_exception        Boolean @default(false)
+  result_powerball_oe     String?
+  result_powerball_unover String?
+  result_ball_sum         String?
+  result_ball_oe          String?
+  result_ball_unover      String?
+  result_ball_size        String?
+
+  betDetail betDetail[] @relation("eospowerball1")
+}
+
+model StarLadder1 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game_odd_left  String?
+  game_odd_right String?
+  game_odd_line3 String?
+  game_odd_line4 String?
+  game_odd_home  String?
+  game_odd_away  String?
+
+  result_exception Boolean @default(false)
+  result_line      String?
+  result_rl        String?
+  result_oe        String?
+
+  betDetail betDetail[] @relation("starladder1")
+}
+
+model StarLadder2 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game_odd_left  String?
+  game_odd_right String?
+  game_odd_line3 String?
+  game_odd_line4 String?
+  game_odd_home  String?
+  game_odd_away  String?
+
+  result_exception Boolean @default(false)
+  result_line      String?
+  result_rl        String?
+  result_oe        String?
+
+  betDetail betDetail[] @relation("starladder2")
+}
+
+model StarLadder3 {
+  id       Int      @id @default(autoincrement())
+  round    Int
+  Playtime DateTime @unique
+
+  game_odd_left  String?
+  game_odd_right String?
+  game_odd_line3 String?
+  game_odd_line4 String?
+  game_odd_home  String?
+  game_odd_away  String?
+
+  result_exception Boolean @default(false)
+  result_line      String?
+  result_rl        String?
+  result_oe        String?
+
+  betDetail betDetail[] @relation("starladder3")
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+model quickMessage {
+  id      Int    @id @default(autoincrement())
+  name    String @default("")
+  type    String
+  number  Int
+  title   String
+  message String @db.Text
+}
+
+model banner {
+  id        Int         @id @default(autoincrement())
+  number    Int
+  name      String
+  memo      String      @default("")
+  link      String      @default("")
+  allTime   Boolean
+  startAt   DateTime?
+  endAt     DateTime?
+  url       String
+  live      Boolean     @default(false)
+  bannerOff bannerOff[] @relation("banneroff")
+}
+
+model bannerOff {
+  id          Int        @id @default(autoincrement())
+  offAt       DateTime   @default(now())
+  banner      banner?    @relation("banneroff", fields: [bannerId], references: [id], onDelete: SetNull)
+  bannerId    Int?
+  parisuser   Parisuser? @relation("userBannerOff", fields: [parisuserId], references: [id], onDelete: SetNull)
+  parisuserId Int?
+
+  @@index([bannerId])
+  @@index([parisuserId])
+}
+
+model eventCalendarSetup {
+  id            Int     @id @default(autoincrement())
+  fold          Boolean
+  calendarCheck Boolean
+  auto          Boolean
+  deposit       Int
+  depositCount  Boolean
+  day1          Int
+  day1Point     Int
+  day2          Int
+  day2Point     Int
+  day3          Int
+  day3Point     Int
+  day4          Int
+  day4Point     Int
+  day5          Int
+  day5Point     Int
+  url           String?
+  contents      String? @db.Text
+  img           String?
+}
+
+model eventLoseAllSetup {
+  id           Int     @id @default(autoincrement())
+  fold         Boolean
+  LoseAllCheck Boolean
+  auto         Boolean
+
+  crossCheck   Boolean @default(false)
+  specialCheck Boolean @default(false)
+  liveCheck    Boolean @default(false)
+  game1        Int     @default(0)
+  game1Rate    String  @default("0")
+  game2        Int     @default(0)
+  game2Rate    String  @default("0")
+  game3        Int     @default(0)
+  game3Rate    String  @default("0")
+  game4        Int     @default(0)
+  game4Rate    String  @default("0")
+  game5        Int     @default(0)
+  game5Rate    String  @default("0")
+  game6        Int     @default(0)
+  game6Rate    String  @default("0")
+  game7        Int     @default(0)
+  game7Rate    String  @default("0")
+  game8        Int     @default(0)
+  game8Rate    String  @default("0")
+
+  url      String?
+  contents String? @db.Text
+  img      String?
+}
+
+model calendarEventData {
+  id          Int       @id @default(autoincrement())
+  parisuser   Parisuser @relation("calendarEvent", fields: [parisuserId], references: [id])
+  parisuserId Int
+  check       DateTime  @default(now())
+
+  @@index([parisuserId])
+}
+
+model eventPoint {
+  id              Int          @id @default(autoincrement())
+  parisuser       Parisuser    @relation("eventpoint", fields: [parisuserId], references: [id])
+  parisuserId     Int
+  eventname       String
+  memo            String?
+  point           Int
+  application     Boolean?     @default(false)
+  applicationDate DateTime?
+  confirm         Boolean?
+  confirmDate     DateTime?
+  payment         Int          @default(0)
+  createAt        DateTime     @default(now())
+  confirmUser     String?
+  bettinglist     bettinglist? @relation("eventPoint", fields: [bettinglistId], references: [id])
+  bettinglistId   Int?
+
+  @@index([parisuserId])
+  @@index([bettinglistId])
+}
+
+model eventBoard {
+  id       Int     @id @default(autoincrement())
+  fold     Boolean @default(false)
+  open     Boolean @default(false)
+  number   Int     @default(0)
+  title    String
+  contents String  @db.Text
+  url      String?
+  img      String?
+}
+
+model adminInbox {
+  id              Int               @id @default(autoincrement())
+  parisuser       Parisuser         @relation("adminInbox", fields: [parisuserId], references: [id])
+  parisuserId     Int
+  titleHead       String
+  title           String
+  contents        String            @db.Text
+  createAt        DateTime          @default(now())
+  adminInboxCheck adminInboxCheck[] @relation("adminInboxCheckup")
+
+  @@index([parisuserId])
+}
+
+model adminInboxCheck {
+  id           Int        @id @default(autoincrement())
+  adminInbox   adminInbox @relation("adminInboxCheckup", fields: [adminInboxId], references: [id], onDelete: Cascade)
+  adminInboxId Int
+  parisuserId  Int
+  view         DateTime   @default(now())
+  userId       String     @default("")
+  nickName     String     @default("")
+
+  @@unique([adminInboxId, parisuserId])
+  @@index([adminInboxId])
+}
+
+model cross {
+  id         Int      @id @default(autoincrement())
+  parseId    Int?
+  game_Event String
+  game_Type  String
+  game_Name  String
+  game_Memo  String?
+  playTime   DateTime
+
+  homeTeam   Team @relation("HomeName", fields: [homeTeamId], references: [id], onDelete: NoAction)
+  homeTeamId Int
+
+  homeOdds Decimal
+  tieOdds  Decimal?
+
+  awayTeam   Team @relation("AwayName", fields: [awayTeamId], references: [id], onDelete: NoAction)
+  awayTeamId Int
+
+  awayOdds         Decimal
+  activate         Boolean
+  score_Home       Int?
+  score_Away       Int?
+  result           String?
+  result_exception Boolean     @default(false)
+  result_cancle    Boolean     @default(false)
+  gameMemo         gameMemo?   @relation("crossGameMemo", fields: [game_Memo, game_Event], references: [game_Memo, game_Event], onDelete: NoAction)
+  betDetail        betDetail[] @relation("cross")
+
+  league   league @relation("leagueCross", fields: [leagueId], references: [id], onDelete: NoAction)
+  leagueId Int
+
+  @@index([homeTeamId])
+  @@index([awayTeamId])
+  @@index([leagueId])
+  @@index([game_Memo, game_Event])
+}
+
+model Team {
+  id         Int    @id @default(autoincrement())
+  name       String
+  game_Event String
+
+  changeName String?
+
+  home          cross[]     @relation("HomeName")
+  away          cross[]     @relation("AwayName")
+  specialhome   special[]   @relation("specialHomeName")
+  specialaway   special[]   @relation("specialAwayName")
+  livehome      live[]      @relation("liveHomeName")
+  liveaway      live[]      @relation("liveAwayName")
+  betDetailHome betDetail[] @relation("detailTeamHome")
+  betDetailAway betDetail[] @relation("detailTeamAway")
+
+  @@unique([name, game_Event])
+}
+
+model league {
+  id         Int    @id @default(autoincrement())
+  name       String
+  game_Event String
+
+  changeName String? @default("")
+  flegImg    String?
+  parse      Boolean @default(true)
+
+  cross     cross[]     @relation("leagueCross")
+  special   special[]   @relation("leagueSpecial")
+  live      live[]      @relation("leagueLive")
+  betDetail betDetail[] @relation("detailLeague")
+
+  @@unique([name, game_Event])
+}
+
+model special {
+  id         Int      @id @default(autoincrement())
+  parseId    Int?
+  game_Event String
+  game_Type  String
+  game_Name  String
+  game_Memo  String?
+  playTime   DateTime
+
+  homeTeam   Team @relation("specialHomeName", fields: [homeTeamId], references: [id], onDelete: NoAction)
+  homeTeamId Int
+
+  homeOdds Decimal
+  tieOdds  Decimal?
+
+  awayTeam   Team @relation("specialAwayName", fields: [awayTeamId], references: [id], onDelete: NoAction)
+  awayTeamId Int
+
+  awayOdds         Decimal
+  activate         Boolean
+  score_Home       Int?
+  score_Away       Int?
+  result           String?
+  result_exception Boolean   @default(false)
+  result_cancle    Boolean   @default(false)
+  gameMemo         gameMemo? @relation("specialGameMemo", fields: [game_Memo, game_Event], references: [game_Memo, game_Event], onDelete: NoAction)
+
+  league   league @relation("leagueSpecial", fields: [leagueId], references: [id], onDelete: NoAction)
+  leagueId Int
+
+  betDetail betDetail[] @relation("special")
+
+  @@index([homeTeamId])
+  @@index([awayTeamId])
+  @@index([leagueId])
+  @@index([game_Memo, game_Event])
+}
+
+model live {
+  id         Int      @id @default(autoincrement())
+  parseId    Int?
+  game_Event String
+  game_Type  String
+  game_Name  String
+  game_Memo  String?
+  playTime   DateTime
+
+  homeTeam   Team @relation("liveHomeName", fields: [homeTeamId], references: [id], onDelete: NoAction)
+  homeTeamId Int
+
+  homeOdds Decimal
+  tieOdds  Decimal?
+
+  awayTeam   Team @relation("liveAwayName", fields: [awayTeamId], references: [id], onDelete: NoAction)
+  awayTeamId Int
+
+  awayOdds         Decimal
+  activate         Boolean
+  score_Home       Int?
+  score_Away       Int?
+  result           String?
+  result_exception Boolean   @default(false)
+  result_cancle    Boolean   @default(false)
+  gameMemo         gameMemo? @relation("liveGameMemo", fields: [game_Memo, game_Event], references: [game_Memo, game_Event], onDelete: NoAction)
+
+  league   league @relation("leagueLive", fields: [leagueId], references: [id], onDelete: NoAction)
+  leagueId Int
+
+  betDetail betDetail[] @relation("live")
+
+  @@index([game_Memo, game_Event])
+  @@index([homeTeamId])
+  @@index([awayTeamId])
+  @@index([leagueId])
+}
+
+model gameMemo {
+  id         Int     @id @default(autoincrement())
+  game_Event String
+  game_Memo  String
+  changeName String? @default("")
+  flegImg    String?
+
+  cross     cross[]     @relation("crossGameMemo")
+  special   special[]   @relation("specialGameMemo")
+  live      live[]      @relation("liveGameMemo")
+  betDetail betDetail[] @relation("detailGameMemo")
+
+  @@unique([game_Event, game_Memo])
+}
