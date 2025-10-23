@@ -22,6 +22,7 @@ declare module "iron-session" {
       TTXD: string;
       nickName: string;
     };
+    lastSave?: number; // Add lastSave to track last session save time
   }
 }
 
