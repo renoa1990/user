@@ -193,6 +193,33 @@ async function handler(
       else {
         let TTXD = Math.random().toString(36).substring(2, 13);
 
+        // 중복 로그인 방지: 현재 활성 세션 확인 및 무효화
+        const currentUser = await client.parisuser.findFirst({
+          where: { id: userIdCheck.id },
+          select: { session: true, lastPageAt: true },
+        });
+
+        // 활성 세션이 있는 경우 무효화
+        if (
+          currentUser?.session &&
+          currentUser.session !== "" &&
+          currentUser.session !== "FORCE_LOGOUT"
+        ) {
+          console.log(
+            `Invalidating existing session for user ${userIdCheck.id}: ${currentUser.session}`
+          );
+          await client.parisuser.update({
+            where: { id: userIdCheck.id },
+            data: {
+              session: "FORCE_LOGOUT",
+              lastPageAt: null,
+            },
+          });
+
+          // 세션 무효화 후 잠시 대기 (다른 세션에서 감지할 시간 제공)
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+
         req.session.user = {
           id: userIdCheck.id,
           userId: userIdCheck.userId,
@@ -255,7 +282,7 @@ async function handler(
             ...loginBonusFilter,
             updateAt: new Date(),
             ip,
-            session: TTXD,
+            session: TTXD, // 새로운 세션 토큰으로 업데이트
             domain: req.headers.host ? req.headers.host : "unknown",
             device: viewport,
             lastPageAt: new Date(), // 마지막 활동 시간 업데이트
@@ -272,12 +299,6 @@ async function handler(
               },
             },
           },
-        });
-
-        // 세션 토큰을 데이터베이스에 저장
-        await client.parisuser.update({
-          where: { id: userIdCheck.id },
-          data: { session: TTXD },
         });
 
         // 세션 저장 (확실히 저장되도록 처리)

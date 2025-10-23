@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
@@ -16,6 +17,7 @@ interface ProfileResponse {
     contact: number;
   };
   message: string;
+  forceLogout?: boolean; // 강제 로그아웃 플래그
 }
 
 export default function authGuard() {
@@ -34,26 +36,46 @@ export default function authGuard() {
   const router = useRouter();
   const [clearSession] = useMutation("/api/users/clear-session");
 
+  // 로그아웃 처리 중인지 추적하는 ref
+  const isLoggingOut = React.useRef(false);
+
   useEffect(() => {
+    // 이미 로그아웃 처리 중이면 무시
+    if (isLoggingOut.current) return;
+
     // 에러가 발생했을 때만 로그아웃 처리
     if (error) {
       console.log("Auth error:", error);
       // 네트워크 오류가 아닌 경우에만 즉시 로그아웃
       if (error?.status < 500 && !error?.message?.includes("network")) {
+        isLoggingOut.current = true;
         clearSession({});
-        router.push("/");
+        router.replace("/"); // push 대신 replace 사용
       } else {
         // 네트워크 오류인 경우 더 긴 시간 대기 후 로그아웃
         setTimeout(() => {
-          clearSession({});
-          router.push("/");
+          if (!isLoggingOut.current) {
+            isLoggingOut.current = true;
+            clearSession({});
+            router.replace("/");
+          }
         }, 10000); // 10초로 연장
       }
     } else if (data && !data.ok) {
       // 명시적으로 실패한 경우에만 로그아웃
       console.log("Auth failed:", data);
-      clearSession({});
-      router.push("/");
+
+      // 강제 로그아웃인 경우 즉시 처리 (재시도 방지)
+      if (data.forceLogout || data.message?.includes("다른 곳에서 로그인")) {
+        console.log("Force logout detected, redirecting to login");
+        isLoggingOut.current = true;
+        clearSession({});
+        router.replace("/");
+      } else {
+        isLoggingOut.current = true;
+        clearSession({});
+        router.replace("/");
+      }
     }
   }, [data, error, router, clearSession]);
 

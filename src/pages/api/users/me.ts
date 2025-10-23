@@ -67,27 +67,16 @@ async function handler(
       if (profile.session === "FORCE_LOGOUT") {
         console.log("Force logout detected for user:", user.id);
         req.session.destroy();
-        return res.json({
+        return res.status(401).json({
           ok: false,
-          message: "관리자에 의해 강제 로그아웃되었습니다",
+          message: "다른 곳에서 로그인하여 현재 세션이 종료되었습니다",
+          forceLogout: true, // 강제 로그아웃 플래그 추가
         });
       }
 
-      // 세션 토큰이 일치하거나, 세션이 비어있는 경우 허용
-      if (
-        profile.session === user.TTXD ||
-        !profile.session ||
-        profile.session === ""
-      ) {
-        // 세션이 비어있거나 일치하지 않으면 현재 세션으로 업데이트
-        if (!profile.session || profile.session !== user.TTXD) {
-          await client.parisuser.update({
-            where: { id: user.id },
-            data: {
-              session: user.TTXD,
-            },
-          });
-        }
+      // 세션 토큰이 정확히 일치하는 경우만 허용
+      if (profile.session === user.TTXD) {
+        // 세션이 일치하므로 정상 처리
 
         res.json({
           ok: true,
@@ -104,31 +93,15 @@ async function handler(
           },
         });
       } else {
-        // 세션 토큰이 다르더라도 사용자가 활성화되어 있으면 허용
-        // (다른 기기에서 로그인했을 수도 있지만, 현재 사용자를 우선시)
+        // 세션 토큰이 일치하지 않으면 강제 로그아웃
         console.log(
-          "Session mismatch detected, but allowing current session for active user"
+          `Session mismatch detected for user ${user.id}: DB=${profile.session}, Session=${user.TTXD}`
         );
-        await client.parisuser.update({
-          where: { id: user.id },
-          data: {
-            session: user.TTXD,
-          },
-        });
-
-        res.json({
-          ok: true,
-          profile: {
-            id: profile.id,
-            nickName: profile.nickName,
-            userId: profile.userId,
-            lv: profile.lv,
-            money: profile.money,
-            point: profile.point,
-            message: profile.message.length,
-            contact: profile.contact.length,
-            role: profile.role,
-          },
+        req.session.destroy();
+        return res.status(401).json({
+          ok: false,
+          message: "세션이 만료되었습니다. 다시 로그인해주세요.",
+          forceLogout: true,
         });
       }
     } else {
